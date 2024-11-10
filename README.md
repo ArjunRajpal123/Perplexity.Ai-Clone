@@ -1,6 +1,6 @@
 # Info
 
-This is a basic copy of perplexity.ai hosted on vercel and made using next.js
+This is a basic copy of perplexity.ai hosted on vercel and made using next.js. Enter main directory to see a more detailed readme regarding how to run/dev this app.
 
 
 # Required env vars to be used in dev and production enviroments
