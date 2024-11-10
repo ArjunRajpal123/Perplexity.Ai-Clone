@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Loader2, Search } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,13 +13,14 @@ export default function SearchBar({ action }: { action: string }) {
   const [query, setQuery] = useState("");
   const [sources, setSources] = useState();
   const [summary, setSummary] = useState();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (action) {
+      setIsPending(true);
       const formData = new FormData(e.currentTarget);
       const searchResults = await fetch(action, {
         method: "POST",
@@ -32,6 +33,7 @@ export default function SearchBar({ action }: { action: string }) {
         setSummary(summary);
       }
       router.refresh();
+      setIsPending(false);
     }
   };
 
@@ -57,8 +59,16 @@ export default function SearchBar({ action }: { action: string }) {
             className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors duration-200"
             disabled={isPending}
           >
-            <Search className="h-5 w-5" />
-            <span className="sr-only">Search</span>
+            {isPending ? (
+              <>
+                <Loader2 className="animate-spin" />
+              </>
+            ) : (
+              <>
+                <Search className="h-5 w-5" />
+                <span className="sr-only">Search</span>
+              </>
+            )}
           </Button>
         </form>
       </Card>

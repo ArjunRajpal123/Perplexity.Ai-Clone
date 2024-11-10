@@ -9,6 +9,12 @@ const nextConfig: NextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'cloud.google.com',
+        port: '',
+        pathname: '/**',
+      }
     ],
   },
 };
