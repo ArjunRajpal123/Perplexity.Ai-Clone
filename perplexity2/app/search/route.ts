@@ -1,4 +1,8 @@
 import { NextResponse } from 'next/server'
+import { parse } from 'node-html-parser';
+import OpenAI from "openai";
+const openai = new OpenAI();
+
 
 export async function POST(request: Request) {
   try {
@@ -31,9 +35,43 @@ export async function POST(request: Request) {
       image: item.pagemap?.cse_image?.[0]?.src,
     })) || []
 
-    console.log('Search API results:', topResults)
+    // for each result extract the content from the page and pass it to openai to summarize
+    // first make get request to the page and extract the content
+    // then convert the content to a summary using open ai api
+    // then return the summary as a snippet
 
-    return NextResponse.json({ results: topResults })
+    /// get requests go here
+    
+    let rawText = ""
+
+    topResults.forEach(async (result: {
+        title: string,
+        link: string,
+        snippet: string,
+        image: string,
+      }) => {
+        const pageContent = await fetch(result.link)
+        const content = await pageContent.text()
+        
+        const doc = parse(content);
+        const paragraphs = doc.querySelectorAll('p');
+        const paragraphTexts = Array.from(paragraphs).map(p => p.textContent);
+        const text = paragraphTexts.join('\n');
+        rawText += text
+    })
+
+
+    // openai api goes here
+    const openaiData = await openai.chat.completions.create({
+        model: "gpt-4o",
+        messages: [
+            { role: "system", content: `You are a search feature like perplexity summarize this ${rawText } and format response in markdown` },
+            { role: "user", content: `Query: ${query}` },
+            ],
+        max_tokens: 100,
+    })
+    const summary = openaiData.choices[0].message.content
+    return NextResponse.json({summary ,results: topResults })
 
   } catch (error) {
     console.error('Search API error:', error)
