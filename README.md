@@ -1,7 +1,9 @@
 # Info
-
 This is a basic copy of perplexity.ai hosted on vercel and made using next.js. Enter main directory to see a more detailed readme regarding how to run/dev this app.
 
+# Deployed
+Visit the following link to try out this app!
+`https://perplexity-ai-clone-topaz.vercel.app/`
 
 # Required env vars to be used in dev and production enviroments
 `export GOOGLE_SEARCH_API_KEY`
