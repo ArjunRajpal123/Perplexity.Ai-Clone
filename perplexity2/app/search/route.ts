@@ -68,7 +68,7 @@ export async function POST(request: Request) {
             { role: "system", content: `You are a search feature like perplexity summarize this ${rawText } and format response in markdown` },
             { role: "user", content: `Query: ${query}` },
             ],
-        max_tokens: 100,
+        max_tokens: 4000,
     })
     const summary = openaiData.choices[0].message.content
     return NextResponse.json({summary ,results: topResults })
