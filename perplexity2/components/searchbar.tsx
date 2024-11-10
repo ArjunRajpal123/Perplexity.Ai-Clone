@@ -62,9 +62,16 @@ export default function SearchBar({ action }: { action: string }) {
           </Button>
         </form>
       </Card>
-      <div className="max-w-4xl overflow-x-scroll">
+      <div className="w-full overflow-x-scroll">
         {sources && <SearchResults results={sources} />}
-        {sources && summary && <div>{summary}</div>}
+        <div> </div>
+        {sources && summary && (
+          <div>
+            <div>Summary</div>
+
+            {summary}
+          </div>
+        )}
       </div>
     </div>
   );
