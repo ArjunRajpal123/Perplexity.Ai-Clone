@@ -1,9 +1,4 @@
 import SearchBar from "@/components/searchbar";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Sidebar } from "@/components/ui/sidebar";
-import Image from "next/image";
 
 export default function Home() {
   return (

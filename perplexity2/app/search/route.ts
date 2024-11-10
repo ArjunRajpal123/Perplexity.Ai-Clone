@@ -21,26 +21,17 @@ export async function POST(request: Request) {
     if (!response.ok) {
       throw new Error(`API responded with status ${response.status}`)
     }
-
     const data = await response.json()
 
-    // Extract the top 5 results
+    // eslint-disable-next-line
     const topResults = data.items?.slice(0, 5).map((item: any) => ({
       title: item.title,
       link: item.link,
       snippet: item.snippet,
       image: item.pagemap?.cse_image?.[0]?.src,
-    })) || []
+    })) || [] 
 
-    // for each result extract the content from the page and pass it to openai to summarize
-    // first make get request to the page and extract the content
-    // then convert the content to a summary using open ai api
-    // then return the summary as a snippet
-
-    /// get requests go here
-    
     let rawText = ""
-
     topResults.forEach(async (result: {
         title: string,
         link: string,
