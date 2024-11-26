@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2, Search } from "lucide-react";
+import { remark } from 'remark';
+import html from 'remark-html';
+
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +15,7 @@ import SearchResults from "./sources";
 export default function SearchBar({ action }: { action: string }) {
   const [query, setQuery] = useState("");
   const [sources, setSources] = useState();
-  const [summary, setSummary] = useState();
+  const [summary, setSummary] = useState("");
   const [isPending, setIsPending] = useState(false);
   const router = useRouter();
 
@@ -30,7 +33,14 @@ export default function SearchBar({ action }: { action: string }) {
       if (searchResults.ok) {
         const { summary, results } = await searchResults.json();
         setSources(results);
-        setSummary(summary);
+
+
+        // Use remark to convert markdown into HTML string
+        const processedContent = await remark()
+          .use(html)
+          .process(summary);
+        const contentHtml = processedContent.toString();
+        setSummary(contentHtml);
       }
       router.refresh();
       setIsPending(false);
@@ -78,8 +88,7 @@ export default function SearchBar({ action }: { action: string }) {
         {sources && summary && (
           <div>
             <div>Summary</div>
-
-            {summary}
+            <div dangerouslySetInnerHTML={{ __html: summary }} />
           </div>
         )}
       </div>
